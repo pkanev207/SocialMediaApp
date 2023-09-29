@@ -24,8 +24,10 @@ app.use(cors({ origin: "http://localhost:3000" }));
 //   optionSuccessStatus: 200,
 // };
 // app.use(cors(corsOptions));
-app.use(express.json());
+
 app.use(cookieParser());
+app.use(express.json()); // for parsing application/json
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -38,11 +40,20 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  const file = req.file;
+  res.status(200).json(file.filename);
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/likes", likeRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Hello!");
+});
 
 app.listen(8800, () => {
   console.log("Connected to backend");

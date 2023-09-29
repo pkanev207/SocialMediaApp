@@ -6,6 +6,7 @@ const secret = process.env.JWT_SECRET;
 
 // use ? instead req.body.smth - provides extra security
 export const register = (req, res) => {
+  // check if user exists
   const sql = "SELECT * FROM users WHERE username = ?";
 
   db.query(sql, [req.body.username], (err, data) => {
@@ -15,13 +16,14 @@ export const register = (req, res) => {
     if (data.length) {
       return res.status(409).json("User already exists");
     }
-
+    // hash password
     const salt = bcrypt.genSaltSync(10);
+    m;
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
-
+    // create user
     const q =
       "INSERT INTO users (`username`, `email`, `password`, `name`) VALUES (?)";
-
+    // values should be in the same order
     const values = [
       req.body.username,
       req.body.email,
@@ -74,6 +76,7 @@ export const logout = (req, res) => {
   res
     .clearCookie("accessToken", {
       secure: true,
+      // to be able to receive cookies from react port:
       sameSite: "none",
     })
     .status(200)

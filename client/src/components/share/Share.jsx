@@ -13,6 +13,7 @@ const Share = () => {
 
   const upload = async () => {
     try {
+      // we have to create formData because we can not send this file directly to our api
       const formData = new FormData();
       formData.append("file", file);
       const res = await makeRequest.post("/upload", formData);

@@ -31,6 +31,7 @@ const Comments = ({ postId }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
+    console.log(postId, desc);
     mutation.mutate({ desc, postId });
     setDesc("");
   };
@@ -50,11 +51,13 @@ const Comments = ({ postId }) => {
       </div>
       {error
         ? "Something went wrong"
-        : isLoading
-        ? "loading"
-        : data.map((comment) => (
+        : // : isLoading
+          // ? "loading"
+          // : data?.length === 0
+          // ? "No comments"
+          data?.map((comment) => (
             <div className="comment">
-              {/* <img src={"/upload/" + comment.profilePic} alt="" /> */}
+              <img src={"/upload/" + comment.profilePic} alt="" />
               <img src={comment.profilePic} alt="" />
               <div className="info">
                 <span>{comment.name}</span>
